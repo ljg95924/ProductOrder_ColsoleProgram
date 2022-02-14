@@ -3,7 +3,7 @@ package product.service;
 import product.controller.ProductView;
 import product.controller.InputView;
 import product.domain.Product;
-import product.repository.FileRead;
+import product.repository.ClassifyFile;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -15,11 +15,10 @@ public class ProductOrder {
     public static void start() {
         //FileRead fileRead = new FileRead();
         ProductOrder productOrder = new ProductOrder();
-        FileRead fileRead = new FileRead();
-        List<Product> productList = fileRead.ReadCSV();
+        ClassifyFile classifyFile = new ClassifyFile();
+        List<Product> productList = classifyFile.classifyFile(classifyFile.getFileToList());
         while (true) {
-            String userSelect = InputView.initialConsoleView();
-            productOrder.compareInputValue(userSelect);
+            productOrder.compareInputValue(InputView.initialConsoleView());
             if (!OrderMode) break;
             ProductView.productListView(productList);
             productOrder.order(productList);
@@ -33,59 +32,63 @@ public class ProductOrder {
             System.out.println("고객님의 주문 감사합니다.");
             OrderMode = false;
         } else {
-            System.out.print("다시 입력해주세요 : ");
-            Scanner scanner = new Scanner(System.in);
-            String ReInput = scanner.nextLine();
-            compareInputValue(ReInput);
+            System.out.print("다시 입력해주세요. ");
+            compareInputValue(InputView.initialConsoleView());
         }
     }
 
     public List order(List<Product> productList) {
         int totalPrice = 0;
+        StringBuilder productCode = new StringBuilder();
+        StringBuilder purchaseAmount = new StringBuilder();
         List<Product> orderProduct = new ArrayList<>();
         do {
-            System.out.print("상품번호 : ");
-            Scanner scanner = new Scanner(System.in);
-            String productCodeNum = scanner.nextLine();
-            System.out.print("수량: ");
-            String purchaseAmount = scanner.nextLine();
+            productCode.append(InputView.InputProductNum());
+            purchaseAmount.append(InputView.InputProductAmount());
 
-            if (productCodeNum.isEmpty() && purchaseAmount.isEmpty()) {
-                break;
-            } else if (!productCodeNum.isEmpty() && !purchaseAmount.isEmpty()) {
-                Iterator<Product> iterator = productList.iterator();
-                int CodeNum = Integer.parseInt(productCodeNum);
-                int purchaseAmountNum = Integer.parseInt(purchaseAmount);
-                while (iterator.hasNext()) {
-                    Product product = iterator.next();
-                    if (CodeNum == product.getNumber()) {
-                        product.setStockAmount(product.getStockAmount() - purchaseAmountNum);
-                        if (CheckStock(product.getStockAmount(), purchaseAmountNum)) {
-                            totalPrice += (purchaseAmountNum * product.getPrice());
-                            orderProduct.add(Product.orderedProduct(product.getNumber(), product.getName(), product.getPrice(), purchaseAmountNum));
-                        }
-                        break;
-                    }
+            if (!productCode.isEmpty() && !purchaseAmount.isEmpty()) {
+                int productCodeNum = Integer.parseInt(String.valueOf(productCode));
+                int purchaseAmountNum = Integer.parseInt(String.valueOf(purchaseAmount));
+                productCode.setLength(0);
+                purchaseAmount.setLength(0);
+                Product product = findOrderProduct(productList, productCodeNum);
+                if (countOrderProduct(product, purchaseAmountNum)) {
+                    totalPrice += product.getPrice() * purchaseAmountNum;
+                    orderProduct.add(Product.orderedProduct(product.getNumber(), product.getName(), product.getPrice(), purchaseAmountNum));
+                } else break;
 
-                }
-            }
+
+            } else break;
         }
         while (true);
         if (!orderProduct.isEmpty()) {
-            OrderList(orderProduct, totalPrice);
+            orderList(orderProduct, totalPrice);
         }
         return productList;
     }
 
-
-    public boolean CheckStock(int stockAmount, int purchaseAmount) {
-        if (stockAmount > purchaseAmount && stockAmount > 0) {
-            return true;
+    public boolean countOrderProduct(Product product, int purchaseAmountNum) {
+        if (product == null) {
+            return false;
         }
-        return false;
+        return product.checkStockAmount(purchaseAmountNum);
+
     }
 
-    public void OrderList(List<Product> orderProduct, int totalPrice) {
+    public Product findOrderProduct(List<Product> productList, int productCodeNum) {
+        Iterator<Product> iterator = productList.iterator();
+
+        while (iterator.hasNext()) {
+            Product product = iterator.next();
+            if (productCodeNum == product.getNumber()) {
+                return product;
+            }
+        }
+        System.out.println("찾는 제품이없습니다.");
+        return null;
+    }
+
+    public void orderList(List<Product> orderProduct, int totalPrice) {
         DecimalFormat formatter = new DecimalFormat("###,###,###");
         System.out.println("주문내역: ");
         for (Product product : orderProduct

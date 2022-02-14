@@ -13,52 +13,26 @@ public class FileRead {
     }
 
     public List ReadCSV() {
-        List<Product> csvList = new ArrayList<>();
-        List<List<String>> list = new ArrayList<>();
+        //List<Product> csvList = new ArrayList<>();
+        List<String> list = new ArrayList<>();
         File csv = new File("C:\\Users\\ljg95\\Downloads\\items.csv");
         String line = "";
 
         try (BufferedReader br = new BufferedReader(new FileReader(csv))) {
-            int increment = 0;
+            //int increment = 0;
             while ((line = br.readLine()) != null) {
-                increment++;
-                String[] var = line.split(",");
-                list.add(Arrays.asList(var));
+                //increment++;
+                //String[] var = line.split(",");
+                list.add(line);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(list);
+        //System.out.println(list.get(1));
 
-        return csvList;
+        return list;
     }
-/*
-        if(increment ==1)
-
-    {
-        continue;
-    }
-        if(increment ==13)
-
-    {
-        long productNumber = Long.parseLong(var[0].trim());
-        String name = var[1].trim();
-        int price = Integer.parseInt(var[3].trim());
-        int stock = Integer.parseInt(var[4].trim());
-        csvList.add(new Product(productNumber, name, price, stock));
-        continue;
-    }
-
-    //System.out.println(line);
-    long productNumber = Long.parseLong(var[0].trim());
-    String name = var[1].trim();
-    int price = Integer.parseInt(var[2].trim());
-    int stock = Integer.parseInt(var[3].trim());
-        csvList.add(new
-
-    Product(productNumber, name, price, stock));*/
-
 
 }

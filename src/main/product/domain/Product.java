@@ -3,7 +3,7 @@ package product.domain;
 public class Product {
     private final long number;
     private final String name;
-    private int price;
+    private final int price;
     private int stockAmount;
 
 
@@ -47,11 +47,13 @@ public class Product {
     }
 
     public boolean checkStockAmount(int orderAmount) {
-        if (this.stockAmount > orderAmount && stockAmount > 0) return true;
+        if (this.stockAmount > orderAmount && stockAmount > 0) {
+            minusStock(orderAmount);
+            return true;
+        }
         System.out.println("재고부족Exception! 해당 제품 현재 재고량은 " + this.stockAmount);
         return false;
     }
-
 
     @Override
     public String toString() {
