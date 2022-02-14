@@ -1,6 +1,6 @@
 package product.repository;
 
-import product.dao.Product;
+import product.domain.Product;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -16,12 +16,10 @@ public class FileRead {
         List<Product> csvList = new ArrayList<>();
         List<List<String>> list = new ArrayList<>();
         File csv = new File("C:\\Users\\ljg95\\Downloads\\items.csv");
-        BufferedReader br = null;
         String line = "";
 
-        try {
+        try (BufferedReader br = new BufferedReader(new FileReader(csv))) {
             int increment = 0;
-            br = new BufferedReader(new FileReader(csv));
             while ((line = br.readLine()) != null) {
                 increment++;
                 String[] var = line.split(",");
@@ -31,16 +29,9 @@ public class FileRead {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                System.out.println(list);
-                if (br != null) {
-                    br.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
+        System.out.println(list);
+
         return csvList;
     }
 /*

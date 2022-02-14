@@ -2,45 +2,45 @@ package product.service;
 
 import product.controller.ProductView;
 import product.controller.InputView;
-import product.dao.Product;
+import product.domain.Product;
 import product.repository.FileRead;
 
 import java.text.DecimalFormat;
 import java.util.*;
 
 public class ProductOrder {
-    public static void main(String[] args) {
+    static boolean OrderMode = true;
+
+
+    public static void start() {
+        //FileRead fileRead = new FileRead();
         ProductOrder productOrder = new ProductOrder();
         FileRead fileRead = new FileRead();
-        ProductView productView = new ProductView();
-
         List<Product> productList = fileRead.ReadCSV();
-
         while (true) {
-            InputView.inputConsoleVeiw();
-            Scanner scanner = new Scanner(System.in);
-            String UserInput = scanner.nextLine();
-            productOrder.CompareInputValue(UserInput);
-            productView.ListView(productList);
-            productOrder.Order(productList);
+            String userSelect = InputView.initialConsoleView();
+            productOrder.compareInputValue(userSelect);
+            if (!OrderMode) break;
+            ProductView.productListView(productList);
+            productOrder.order(productList);
         }
     }
 
-    public void CompareInputValue(String UserInput) {
-        if (UserInput.equals("o")) {
 
+    public void compareInputValue(String UserInput) {
+        if (UserInput.equals("o")) {
         } else if (UserInput.equals("q")) {
             System.out.println("고객님의 주문 감사합니다.");
-            System.exit(0);
+            OrderMode = false;
         } else {
             System.out.print("다시 입력해주세요 : ");
             Scanner scanner = new Scanner(System.in);
             String ReInput = scanner.nextLine();
-            CompareInputValue(ReInput);
+            compareInputValue(ReInput);
         }
     }
 
-    public List Order(List<Product> productList) {
+    public List order(List<Product> productList) {
         int totalPrice = 0;
         List<Product> orderProduct = new ArrayList<>();
         do {
@@ -62,7 +62,7 @@ public class ProductOrder {
                         product.setStockAmount(product.getStockAmount() - purchaseAmountNum);
                         if (CheckStock(product.getStockAmount(), purchaseAmountNum)) {
                             totalPrice += (purchaseAmountNum * product.getPrice());
-                            orderProduct.add(new Product(product.getNumber(), product.getName(), product.getPrice(), purchaseAmountNum));
+                            orderProduct.add(Product.orderedProduct(product.getNumber(), product.getName(), product.getPrice(), purchaseAmountNum));
                         }
                         break;
                     }
