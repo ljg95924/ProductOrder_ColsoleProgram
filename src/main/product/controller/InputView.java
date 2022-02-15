@@ -12,12 +12,12 @@ public class InputView {
         return UserInput.oneInputValue();
     }
 
-    public static String InputProductNum() {
+    public static String inputProductNum() {
         System.out.print("구매할 상품번호 : ");
         return UserInput.oneInputValue();
     }
 
-    public static String InputProductAmount() {
+    public static String inputProductAmount() {
         System.out.print("구매할 개수: ");
         return UserInput.oneInputValue();
     }

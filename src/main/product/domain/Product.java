@@ -38,10 +38,6 @@ public class Product {
         return stockAmount;
     }
 
-    public void setStockAmount(int stockAmount) {
-        this.stockAmount = stockAmount;
-    }
-
     public void minusStock(int orderAmount) {
         this.stockAmount -= orderAmount;
     }
@@ -53,6 +49,10 @@ public class Product {
         }
         System.out.println("재고부족Exception! 해당 제품 현재 재고량은 " + this.stockAmount);
         return false;
+    }
+
+    public void printOrderProduct() {
+        System.out.println(getName() + " - " + getStockAmount() + "개");
     }
 
     @Override

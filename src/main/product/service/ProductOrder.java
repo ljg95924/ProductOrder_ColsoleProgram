@@ -5,15 +5,12 @@ import product.controller.InputView;
 import product.domain.Product;
 import product.repository.ClassifyFile;
 
-import java.text.DecimalFormat;
 import java.util.*;
 
 public class ProductOrder {
     static boolean OrderMode = true;
 
-
     public static void start() {
-        //FileRead fileRead = new FileRead();
         ProductOrder productOrder = new ProductOrder();
         ClassifyFile classifyFile = new ClassifyFile();
         List<Product> productList = classifyFile.classifyFile(classifyFile.getFileToList());
@@ -28,6 +25,7 @@ public class ProductOrder {
 
     public void compareInputValue(String UserInput) {
         if (UserInput.equals("o")) {
+
         } else if (UserInput.equals("q")) {
             System.out.println("고객님의 주문 감사합니다.");
             OrderMode = false;
@@ -39,16 +37,17 @@ public class ProductOrder {
 
     public List order(List<Product> productList) {
         int totalPrice = 0;
+        int productCodeNum, purchaseAmountNum;
         StringBuilder productCode = new StringBuilder();
         StringBuilder purchaseAmount = new StringBuilder();
         List<Product> orderProduct = new ArrayList<>();
         do {
-            productCode.append(InputView.InputProductNum());
-            purchaseAmount.append(InputView.InputProductAmount());
+            productCode.append(InputView.inputProductNum());
+            purchaseAmount.append(InputView.inputProductAmount());
 
             if (!productCode.isEmpty() && !purchaseAmount.isEmpty()) {
-                int productCodeNum = Integer.parseInt(String.valueOf(productCode));
-                int purchaseAmountNum = Integer.parseInt(String.valueOf(purchaseAmount));
+                productCodeNum = Integer.parseInt(String.valueOf(productCode));
+                purchaseAmountNum = Integer.parseInt(String.valueOf(purchaseAmount));
                 productCode.setLength(0);
                 purchaseAmount.setLength(0);
                 Product product = findOrderProduct(productList, productCodeNum);
@@ -89,18 +88,13 @@ public class ProductOrder {
     }
 
     public void orderList(List<Product> orderProduct, int totalPrice) {
-        DecimalFormat formatter = new DecimalFormat("###,###,###");
         System.out.println("주문내역: ");
         for (Product product : orderProduct
         ) {
-            System.out.println(product.getName() + " - " + product.getStockAmount() + "개");
+            product.printOrderProduct();
         }
-        System.out.println("주문금액: " + formatter.format(totalPrice) + "원");
-        if (totalPrice < 50000) {
-            totalPrice += 2500;
-            System.out.println("배송비: " + formatter.format(2500) + "원");
-        }
-        System.out.println("지불금액: " + formatter.format(totalPrice) + "원");
+        ProductView.printOrderTotalPrice(totalPrice);
+
     }
 
 }

@@ -16,18 +16,15 @@ public class ClassifyFile {
 
     public List<String> getFileToList() {
         FileRead fileRead = new FileRead();
-        return fileRead.ReadCSV();
+        return fileRead.readCSV();
     }
 
     public List<Product> classifyFile(List<String> lists) {
         Iterator iterator = lists.iterator();
         List<Product> productList = new ArrayList<>();
-
-
         while (iterator.hasNext()) {
             increment++;
             line = (String) iterator.next();
-            //System.out.println(line);
             var = line.split(",");
             if (increment == 1) {
                 continue;
@@ -49,28 +46,3 @@ public class ClassifyFile {
         return productList;
     }
 }
-/*
-        if(increment ==1)
-
-    {
-        continue;
-    }
-        if(increment ==13)
-
-    {
-        long productNumber = Long.parseLong(var[0].trim());
-        String name = var[1].trim();
-        int price = Integer.parseInt(var[3].trim());
-        int stock = Integer.parseInt(var[4].trim());
-        csvList.add(new Product(productNumber, name, price, stock));
-        continue;
-    }
-
-    //System.out.println(line);
-    long productNumber = Long.parseLong(var[0].trim());
-    String name = var[1].trim();
-    int price = Integer.parseInt(var[2].trim());
-    int stock = Integer.parseInt(var[3].trim());
-        csvList.add(new
-
-    Product(productNumber, name, price, stock));*/

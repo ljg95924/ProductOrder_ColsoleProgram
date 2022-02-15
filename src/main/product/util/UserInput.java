@@ -9,7 +9,4 @@ public class UserInput {
         return scanner.nextLine();
     }
 
-    public boolean checkInputEmpty(StringBuilder productCodeNum, StringBuilder purchaseAmount) {
-        return !productCodeNum.isEmpty() && !purchaseAmount.isEmpty();
-    }
 }

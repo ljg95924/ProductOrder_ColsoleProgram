@@ -1,5 +1,6 @@
 package product.controller;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class ProductView {
@@ -17,5 +18,15 @@ public class ProductView {
         }
 
         System.out.println();
+    }
+
+    public static void printOrderTotalPrice(int totalPrice) {
+        DecimalFormat formatter = new DecimalFormat("###,###,###");
+        System.out.println("주문금액: " + formatter.format(totalPrice) + "원");
+        if (totalPrice < 50000) {
+            totalPrice += 2500;
+            System.out.println("배송비: " + formatter.format(2500) + "원");
+        }
+        System.out.println("지불금액: " + formatter.format(totalPrice) + "원");
     }
 }

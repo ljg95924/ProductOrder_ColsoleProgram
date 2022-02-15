@@ -1,0 +1,8 @@
+ProductionOrderProject\
+
+### IntelliJ IDEA ###
+.idea
+*.iml
+
+### Java template ###
+*.class
