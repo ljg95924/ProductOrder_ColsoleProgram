@@ -1,7 +1,9 @@
-#ProductOrder ConsoleProgram
-##제품 주문 콘솔 프로그램
+# ProductOrder ConsoleProgram
 
-###요구사항
+## 제품 주문 콘솔 프로그램
+
+### 요구사항
+
 1. 제품은 제품번호, 제품명, 가격, 수량으로 이루어져 있다.
 2. 주문은 주문 제품번호와 주문수량으로 받는다.
 3. 주문 시 수량이 부족할 경우 SoldOutException 이 발생한다.
