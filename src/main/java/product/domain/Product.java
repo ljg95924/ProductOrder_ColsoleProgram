@@ -1,11 +1,12 @@
 package product.domain;
 
+import java.util.Objects;
+
 public class Product {
     private final long number;
     private final String name;
     private final int price;
     private int stockAmount;
-
 
     private Product(long number, String name, int price, int stockAmount) {
         this.number = number;
@@ -53,6 +54,19 @@ public class Product {
 
     public void printOrderProduct() {
         System.out.println(getName() + " - " + getStockAmount() + "개");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Product)) return false;
+        Product product = (Product) o;
+        return number == product.number;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(number);
     }
 
     @Override

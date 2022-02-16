@@ -1,11 +1,13 @@
 package product.service;
 
-import product.controller.ProductView;
 import product.controller.InputView;
+import product.controller.ProductView;
 import product.domain.Product;
 import product.repository.ClassifyFile;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class ProductOrder {
     static boolean OrderMode = true;
@@ -23,10 +25,10 @@ public class ProductOrder {
     }
 
 
-    public void compareInputValue(String UserInput) {
-        if (UserInput.equals("o")) {
+    public void compareInputValue(String userInput) {
+        if (userInput.equals("o")) {
 
-        } else if (UserInput.equals("q")) {
+        } else if (userInput.equals("q")) {
             System.out.println("고객님의 주문 감사합니다.");
             OrderMode = false;
         } else {
@@ -35,12 +37,12 @@ public class ProductOrder {
         }
     }
 
-    public List order(List<Product> productList) {
+    public void order(List<Product> productList) {
         int totalPrice = 0;
         int productCodeNum, purchaseAmountNum;
         StringBuilder productCode = new StringBuilder();
         StringBuilder purchaseAmount = new StringBuilder();
-        List<Product> orderProduct = new ArrayList<>();
+        List<Product> orderProductList = new ArrayList<>();
         do {
             productCode.append(InputView.inputProductNum());
             purchaseAmount.append(InputView.inputProductAmount());
@@ -53,17 +55,18 @@ public class ProductOrder {
                 Product product = findOrderProduct(productList, productCodeNum);
                 if (countOrderProduct(product, purchaseAmountNum)) {
                     totalPrice += product.getPrice() * purchaseAmountNum;
-                    orderProduct.add(Product.orderedProduct(product.getNumber(), product.getName(), product.getPrice(), purchaseAmountNum));
+                    orderProductList.add(Product.orderedProduct(product.getNumber(), product.getName(), product.getPrice(), purchaseAmountNum));
                 } else break;
 
 
             } else break;
         }
         while (true);
-        if (!orderProduct.isEmpty()) {
-            orderList(orderProduct, totalPrice);
+        if (!orderProductList.isEmpty()) {
+            ProductView.orderList(orderProductList);
+            ProductView.printOrderTotalPrice(totalPrice);
         }
-        return productList;
+        // return productList;
     }
 
     public boolean countOrderProduct(Product product, int purchaseAmountNum) {
@@ -87,14 +90,5 @@ public class ProductOrder {
         return null;
     }
 
-    public void orderList(List<Product> orderProduct, int totalPrice) {
-        System.out.println("주문내역: ");
-        for (Product product : orderProduct
-        ) {
-            product.printOrderProduct();
-        }
-        ProductView.printOrderTotalPrice(totalPrice);
-
-    }
 
 }

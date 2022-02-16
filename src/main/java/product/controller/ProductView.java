@@ -1,5 +1,7 @@
 package product.controller;
 
+import product.domain.Product;
+
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -28,5 +30,14 @@ public class ProductView {
             System.out.println("배송비: " + formatter.format(2500) + "원");
         }
         System.out.println("지불금액: " + formatter.format(totalPrice) + "원");
+    }
+
+    public static void orderList(List<Product> orderProduct) {
+        System.out.println("주문내역: ");
+        for (Product product : orderProduct
+        ) {
+            product.printOrderProduct();
+        }
+
     }
 }
